@@ -10,9 +10,6 @@ dotenv.config({ path: join(dirname(fileURLToPath(import.meta.url)), '..', '..', 
 
 import { sendReport } from './observer/telegram.js'
 
-// ═══════════════════════════════════════════
-// Swarm Meta-Analyzer
-// ═══════════════════════════════════════════
 //
 // Reads recent observer results (with full telemetry),
 // pipes them to Claude CLI for meta-analysis of swarm performance,

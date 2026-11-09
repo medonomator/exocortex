@@ -505,7 +505,6 @@ async function main() {
       : Promise.resolve(0)
     const decayPromise = decayStaleRecalls()
 
-    // ── Memory recall: vector + lexical + signals (RRF fusion via RecallService) ──
     let recallRes = null
     try {
       // Intent comes from the current turn - user's "как починить X?" stays
@@ -539,7 +538,6 @@ async function main() {
       log(`recall failed: ${err?.message ?? err}`)
     }
 
-    // ── Graph-proximity boost ──
     // For each recall candidate, check how many of its linked kg_entities
     // fall in the query's entity-neighbourhood (query keywords → matching
     // entities + 1-hop graph expansion). Items with ≥1 match get promoted.
@@ -578,7 +576,6 @@ async function main() {
       }
     }
 
-    // ── Cross-encoder rerank (OpenAI gpt-4o-mini as listwise judge) ──
     // Runs only when we have a pool worth reranking. Failures fall back
     // to the fusion-rank order silently.
     if (RERANK_ENABLED && recallRes?.items?.length > MAX_RESULTS) {
@@ -596,7 +593,6 @@ async function main() {
       recallRes.items = recallRes.items.slice(0, MAX_RESULTS)
     }
 
-    // ── Signal gate ──
     // Drop items that fail both vector and lexical thresholds. Runs AFTER
     // rerank so we first let the LLM judge pick the "best of what we have",
     // then veto the whole batch if even the best is below the relevance
@@ -653,7 +649,6 @@ async function main() {
       await logRecall(sessionId, itemIds, userMessage).catch(() => 0)
     }
 
-    // ── Graph: still lives in PostgreSQL ──
     // Use the enriched query so that "делать все постепенно" pulls keywords
     // from the previous turn's topic instead of just "постепенно".
     //
@@ -691,7 +686,6 @@ async function main() {
       } catch { /* non-critical */ }
     }
 
-    // ── Assemble output ──
     const parts = []
     const memContext = recallRes ? formatItemContext(recallRes.items) : ''
     if (memContext) {

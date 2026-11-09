@@ -16,10 +16,6 @@ import { resolve, relative } from 'node:path'
 import { execSync } from 'node:child_process'
 import { readStdinSync } from './utils.mjs'
 
-// ═══════════════════════════════════════════
-// Parse hook input
-// ═══════════════════════════════════════════
-
 const raw = readStdinSync()
 let input
 try { input = JSON.parse(raw) } catch { process.exit(0) }
@@ -31,10 +27,6 @@ if (toolName !== 'Read' && toolName !== 'Edit') process.exit(0)
 
 const filePath = input?.tool_input?.file_path ?? ''
 if (!filePath) process.exit(0)
-
-// ═══════════════════════════════════════════
-// Find repo root and file-index.json
-// ═══════════════════════════════════════════
 
 let repoRoot
 try {
@@ -50,10 +42,6 @@ try {
 const indexPath = resolve(repoRoot, '.file-index.json')
 if (!existsSync(indexPath)) process.exit(0)
 
-// ═══════════════════════════════════════════
-// Load index and lookup file
-// ═══════════════════════════════════════════
-
 let index
 try {
   index = JSON.parse(readFileSync(indexPath, 'utf-8'))
@@ -66,10 +54,6 @@ const relPath = relative(repoRoot, filePath)
 const fileData = index[relPath]
 
 if (!fileData) process.exit(0) // File not in index (< 2 commits or not tracked)
-
-// ═══════════════════════════════════════════
-// Build context
-// ═══════════════════════════════════════════
 
 const lines = []
 
@@ -106,10 +90,6 @@ if (fileData.companions?.length > 0) {
     lines.push(`    → ${c.file} (${c.ratio}% co-change)`)
   }
 }
-
-// ═══════════════════════════════════════════
-// Output
-// ═══════════════════════════════════════════
 
 const output = {
   hookSpecificOutput: {

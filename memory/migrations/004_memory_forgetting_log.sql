@@ -1,4 +1,3 @@
--- ═════════════════════════════════════════════════════════════════════════
 -- Migration 004: mem_forgetting_log
 --
 -- Audit trail of every lifecycle transition: when an item decayed, was
@@ -8,7 +7,6 @@
 --   • Rolling back mass-archive mistakes
 --
 -- Append-only. Never updated or deleted.
--- ═════════════════════════════════════════════════════════════════════════
 
 CREATE TABLE IF NOT EXISTS mem_forgetting_log (
   id             UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

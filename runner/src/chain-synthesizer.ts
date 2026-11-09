@@ -1,8 +1,5 @@
 import type { LlmProvider } from './types.js'
 
-// ═══════════════════════════════════════════
-// Chain Synthesizer — Multi-step synthesis
-// ═══════════════════════════════════════════
 // When swarm produces many signals (40+), single-pass
 // synthesis loses information. Chain synthesis:
 // 1. Groups signals by source agent

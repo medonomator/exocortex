@@ -9,5 +9,5 @@
     "noUncheckedIndexedAccess": true
   },
   "include": ["core/**/*", "items/**/*", "stores/**/*", "signals/**/*", "policies/**/*", "pipeline/**/*", "services/**/*", "providers/**/*", "index.ts"],
-  "exclude": ["dist", "node_modules", "tests"]
+  "exclude": ["dist", "node_modules", "tests", "testing"]
 }

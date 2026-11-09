@@ -12,10 +12,6 @@
  * `type` discriminator and their type-specific `payload`.
  */
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Confidence (Beta distribution) - allows evidence accumulation
-// ─────────────────────────────────────────────────────────────────────────────
-
 /**
  * Confidence represented as a Beta distribution.
  * alpha = successes/confirmations + 1
@@ -29,18 +25,10 @@ export interface Confidence {
   beta: number; // >= 1, monotonically non-decreasing (only grows via contradict)
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Emotion (valence/arousal) - slot for future emotion detection
-// ─────────────────────────────────────────────────────────────────────────────
-
 export interface Emotion {
   valence: number; // -1 (negative) .. 1 (positive)
   arousal: number; // 0 (calm) .. 1 (excited)
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Provenance - first-class origin metadata
-// ─────────────────────────────────────────────────────────────────────────────
 
 export type ProvenanceSource =
   | 'claude-session'
@@ -89,19 +77,11 @@ export interface Provenance {
   extra?: Record<string, unknown>;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Raw content - always preserved for re-embedding / re-processing
-// ─────────────────────────────────────────────────────────────────────────────
-
 export interface RawContent {
   text: string;
   contentType: string; // 'text/plain' | 'text/markdown' | 'application/json' | ...
   sourceUri?: string;
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// MemoryEvent - atomic input to the system
-// ─────────────────────────────────────────────────────────────────────────────
 
 export type EventKind =
   | 'session-turn'
@@ -125,10 +105,6 @@ export interface MemoryEvent {
   provenance: Provenance;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Lifecycle states (orthogonal to confidence)
-// ─────────────────────────────────────────────────────────────────────────────
-
 export type LifecycleStatus =
   /** Freshly relevant; participates in hot-path recall. */
   | 'active'
@@ -149,10 +125,6 @@ export type AbstractionLevel =
   | 2
   /** Identity-level fact (persistent trait, preference, principle). */
   | 3;
-
-// ─────────────────────────────────────────────────────────────────────────────
-// MemoryItem - universal stored cell
-// ─────────────────────────────────────────────────────────────────────────────
 
 /** Discriminator for payload shape. */
 export type ItemType =
@@ -182,7 +154,6 @@ export interface MemoryItem<T = unknown> {
    */
   raw: RawContent;
 
-  // ── Lifecycle ────────────────────────────────────────────────────────────
   status: LifecycleStatus;
   level: AbstractionLevel;
   createdAt: Date;
@@ -190,7 +161,6 @@ export interface MemoryItem<T = unknown> {
   /** Last time this item was surfaced in recall or reinforced. */
   lastAccessedAt: Date;
 
-  // ── Confidence (Beta) ────────────────────────────────────────────────────
   conf: Confidence;
 
   /**
@@ -199,17 +169,14 @@ export interface MemoryItem<T = unknown> {
    */
   stability: number;
 
-  // ── Salience signals ─────────────────────────────────────────────────────
   /** 0..1; how important this item is regardless of recency. */
   importance: number;
   emotion?: Emotion;
   /** Count of hits across recall + reinforce. */
   accessCount: number;
 
-  // ── Origin ───────────────────────────────────────────────────────────────
   provenance: Provenance;
 
-  // ── Fine-tune readiness ─────────────────────────────────────────────────
   /** User explicitly approved this item (thumbs up). */
   humanApproved?: boolean;
   /** User correction - stored for DPO training pairs. */
@@ -217,14 +184,9 @@ export interface MemoryItem<T = unknown> {
   /** True iff this item is eligible for inclusion in fine-tune datasets. */
   trainingEligible: boolean;
 
-  // ── Freeform metadata ────────────────────────────────────────────────────
   /** Non-schema-critical context (project, tags, tokens spent, etc.). */
   metadata: Record<string, unknown>;
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Query - recall request
-// ─────────────────────────────────────────────────────────────────────────────
 
 export type RecallMode =
   /** Active items only (default). */
@@ -281,10 +243,6 @@ export interface RecallResult {
   sources: string[];
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Ingest / consolidate / forget result types
-// ─────────────────────────────────────────────────────────────────────────────
-
 export interface IngestResult {
   /** Item created or updated as a result of this event. May be null if the event was deduplicated. */
   itemId: string | null;
@@ -321,10 +279,6 @@ export interface ForgetResult {
   itemsTombstoned: number;
   elapsedMs: number;
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Time range helper
-// ─────────────────────────────────────────────────────────────────────────────
 
 export interface TimeRange {
   from: Date;

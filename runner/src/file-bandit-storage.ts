@@ -3,9 +3,6 @@ import { dirname } from 'node:path'
 import type { BanditParams } from '@cognitive-engine/core'
 import type { SwarmBanditStorage } from '@cognitive-swarm/core'
 
-// ═══════════════════════════════════════════
-// FileBanditStorage — Persistent bandit state
-// ═══════════════════════════════════════════
 // Stores Thompson Bandit params (mu, sigma per action)
 // to a JSON file so agents retain learning across runs.
 //

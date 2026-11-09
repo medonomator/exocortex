@@ -1,4 +1,3 @@
--- ═════════════════════════════════════════════════════════════════════════
 -- Migration 002: mem_events
 --
 -- Raw input events received via ingest(). Preserved for:
@@ -8,7 +7,6 @@
 --
 -- Events are immutable once stored. Downstream items reference events via
 -- provenance.derivedFrom (the UUID of the event id, or other item ids).
--- ═════════════════════════════════════════════════════════════════════════
 
 DO $$ BEGIN
   CREATE TYPE mem_event_kind AS ENUM (

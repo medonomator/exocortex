@@ -5,3 +5,4 @@ dist/
 *.log
 results/
 project-aliases.json
+eval/.cache/

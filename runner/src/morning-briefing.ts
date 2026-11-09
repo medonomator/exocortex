@@ -11,9 +11,6 @@ import { sendReport } from './observer/telegram.js'
 import { analyzeSessionLogs, formatSessionStats } from './session-analyzer.js'
 import { createPool } from './shared/db.js'
 
-// ═══════════════════════════════════════════
-// Morning Telegram Briefing
-// ═══════════════════════════════════════════
 // Zero LLM cost — pure graph queries + formatting
 //
 // Usage:
@@ -29,8 +26,6 @@ const TELEGRAM_CHAT_ID = process.env['TELEGRAM_CHAT_ID'] ?? ''
 function parseArgs() {
   return { dryRun: process.argv.includes('--dry-run') }
 }
-
-// ── Graph queries ──
 
 interface RecentEntity {
   name: string
@@ -87,8 +82,6 @@ async function getIsolatedEntities(pool: pg.Pool): Promise<IsolatedEntity[]> {
   return rows
 }
 
-// ── Latest observer result ──
-
 interface ResultSummary {
   conversations: number
   messages: number
@@ -113,8 +106,6 @@ function loadLatestResult(): ResultSummary | null {
     return null
   }
 }
-
-// ── Format briefing ──
 
 function formatBriefing(
   entities: RecentEntity[],
@@ -182,8 +173,6 @@ function formatBriefing(
 
   return lines.join('\n')
 }
-
-// ── Main ──
 
 async function main() {
   const { dryRun } = parseArgs()

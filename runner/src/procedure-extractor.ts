@@ -1,9 +1,6 @@
 import type { ProcedureInput, ProcedureSourceType } from '../../memory-graph/src/types.js'
 import type { LlmProvider } from './types.js'
 
-// ═══════════════════════════════════════════
-// Procedure Extractor — Post-swarm GPT call
-// ═══════════════════════════════════════════
 // Takes the swarm's analysis text and extracts
 // procedural memory: "when X happens → do Y"
 

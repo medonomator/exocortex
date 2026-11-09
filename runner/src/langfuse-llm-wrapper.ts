@@ -73,8 +73,6 @@ export class LangfuseLlmWrapper implements LlmProvider {
     return this.isTokenCounting(this.inner) ? this.inner.tokensUsed : 0
   }
 
-  // ── Private ──
-
   private async traceCompletion<R extends LlmResponse>(
     genName: string,
     execute: () => Promise<R>,

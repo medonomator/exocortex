@@ -7,9 +7,6 @@ import { resolveProjectNames, projectFromCwd } from './project-alias.mjs'
 
 loadEnv()
 
-// ═══════════════════════════════════════════
-// Hook: Session Start Briefing
-// ═══════════════════════════════════════════
 // On session start, provides context from knowledge graph:
 // - Recent decisions and entities for current project
 // - Active work items (high mention_count, recent last_seen)

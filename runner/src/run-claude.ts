@@ -13,9 +13,6 @@ import { formatTelegramReport, sendReport } from './observer/telegram.js'
 import { GraphStore } from '../../memory-graph/src/index.js'
 import { analyzeSessionLogs, formatSessionStats } from './session-analyzer.js'
 
-// ═══════════════════════════════════════════
-// Exocortex Runner v2 - Claude CLI Edition
-// ═══════════════════════════════════════════
 //
 // Replaces SwarmOrchestrator + OpenAI with a single
 // Claude CLI call (claude-opus-4-6).
@@ -67,10 +64,6 @@ function parseArgs() {
     verbose: args.includes('--verbose'),
   }
 }
-
-// ═══════════════════════════════════════════
-// Claude CLI call - single prompt, all-in-one
-// ═══════════════════════════════════════════
 
 const CLAUDE_SYSTEM_PROMPT = `You are an intelligence analyst reviewing a developer's daily Claude Code sessions.
 
@@ -204,10 +197,6 @@ function parseClaudeOutput(raw: string): {
   }
 }
 
-// ═══════════════════════════════════════════
-// Entity/procedure types validation
-// ═══════════════════════════════════════════
-
 const VALID_ENTITY_TYPES = new Set([
   'project', 'technology', 'bug', 'decision', 'person', 'concept', 'file', 'service',
 ])
@@ -215,10 +204,6 @@ const VALID_RELATION_TYPES = new Set([
   'uses', 'depends_on', 'fixed_by', 'caused_by', 'decided', 'contradicts',
   'replaced_by', 'works_on', 'part_of', 'related_to',
 ])
-
-// ═══════════════════════════════════════════
-// Main
-// ═══════════════════════════════════════════
 
 async function main() {
   const { hours, dryRun, noTelegram, verbose } = parseArgs()

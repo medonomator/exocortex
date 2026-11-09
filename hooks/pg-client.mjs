@@ -143,7 +143,6 @@ export async function getProjectProcedures(project, limit = 5) {
   return queryGraph(sql, [project, limit])
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
 // Recall feedback (auto-importance learning)
 //
 // Flow per UserPromptSubmit hook turn:
@@ -154,7 +153,6 @@ export async function getProjectProcedures(project, limit = 5) {
 //      get a small importance decrement (= recall didn't help).
 //   3. logRecall() - record items recalled on this turn, so the NEXT turn
 //      can ack them.
-// ═══════════════════════════════════════════════════════════════════════════
 
 const ACK_DELTA = 0.02        // +importance when user engages with recalled item
 const DECAY_DELTA = -0.01     // -importance when recalled but unused
@@ -284,10 +282,6 @@ export async function logRecall(sessionId, itemIds, queryText) {
     return 0
   }
 }
-
-// ═══════════════════════════════════════════════════════════════════════════
-// Graph-proximity (item-entity links)
-// ═══════════════════════════════════════════════════════════════════════════
 
 /**
  * Resolve query keywords to kg_entities ids, then expand by 1 hop over

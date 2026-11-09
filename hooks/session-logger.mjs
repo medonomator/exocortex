@@ -5,10 +5,6 @@ import { join } from 'node:path'
 import { homedir } from 'node:os'
 import { readStdinSync } from './utils.mjs'
 
-// ═══════════════════════════════════════════
-// Hook: Session Logger (Stop)
-// ═══════════════════════════════════════════
-
 const LOG_DIR = join(homedir(), '.claude', 'logs')
 
 function main() {

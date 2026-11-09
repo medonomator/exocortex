@@ -1,4 +1,3 @@
--- ═════════════════════════════════════════════════════════════════════════
 -- @exocortex/memory - Migration 001: memory_items
 --
 -- Universal MemoryItem<T> table. Every long-term-stored cell uses this
@@ -11,12 +10,10 @@
 --   • Lifecycle status is orthogonal to confidence.
 --   • Embeddings are NOT stored here - they live in Qdrant (cross-ref by id).
 --   • raw_text is always preserved for re-embedding / re-processing.
--- ═════════════════════════════════════════════════════════════════════════
 
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- ── Enum-like CHECK domains. Use text for flexibility; JSONB elsewhere. ───
 DO $$ BEGIN
   CREATE TYPE mem_item_type AS ENUM ('episode', 'fact', 'relation', 'procedure', 'abstraction');
 EXCEPTION WHEN duplicate_object THEN NULL; END $$;
@@ -24,8 +21,6 @@ EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 DO $$ BEGIN
   CREATE TYPE mem_lifecycle_status AS ENUM ('active', 'decayed', 'archived', 'tombstoned');
 EXCEPTION WHEN duplicate_object THEN NULL; END $$;
-
--- ═════════════════════════════════════════════════════════════════════════
 
 CREATE TABLE IF NOT EXISTS mem_items (
   id                 UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -77,8 +72,6 @@ CREATE TABLE IF NOT EXISTS mem_items (
   metadata           JSONB NOT NULL DEFAULT '{}'
 );
 
--- ── Indexes ──────────────────────────────────────────────────────────────
-
 -- Type / status / level are the most common filters.
 CREATE INDEX IF NOT EXISTS idx_mem_items_type       ON mem_items(type);
 CREATE INDEX IF NOT EXISTS idx_mem_items_status     ON mem_items(status);
@@ -106,8 +99,6 @@ CREATE INDEX IF NOT EXISTS idx_mem_items_active_conf ON mem_items(type, confiden
 -- Session scoping (common provenance query).
 CREATE INDEX IF NOT EXISTS idx_mem_items_prov_session ON mem_items(provenance_session)
   WHERE provenance_session IS NOT NULL;
-
--- ── updated_at auto-bump trigger ─────────────────────────────────────────
 
 CREATE OR REPLACE FUNCTION mem_bump_updated_at() RETURNS TRIGGER AS $$
 BEGIN

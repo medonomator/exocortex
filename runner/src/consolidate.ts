@@ -12,9 +12,6 @@ dotenv.config({ path: join(dirname(fileURLToPath(import.meta.url)), '..', '..', 
 import { sendTelegramMessage } from './observer/telegram.js'
 import { createPool } from './shared/db.js'
 
-// ═══════════════════════════════════════════
-// Memory Consolidation
-// ═══════════════════════════════════════════
 //
 // 1. Merge similar entities (pg_trgm similarity)
 // 2. Create shortcut relations (frequent 2-hop paths)
@@ -32,8 +29,6 @@ const TELEGRAM_CHAT_ID = process.env['TELEGRAM_CHAT_ID'] ?? ''
 function parseArgs() {
   return { dryRun: process.argv.includes('--dry-run') }
 }
-
-// ── Step 1: Merge similar entities ──
 
 interface SimilarPair {
   a_id: string; a_name: string; a_type: string
@@ -127,8 +122,6 @@ async function mergeDuplicates(pool: pg.Pool, dryRun: boolean): Promise<string[]
   return merged
 }
 
-// ── Step 2: Create shortcut relations ──
-
 async function createShortcuts(pool: pg.Pool, dryRun: boolean): Promise<number> {
   const { rows } = await pool.query<{
     from_id: string; to_id: string
@@ -173,8 +166,6 @@ async function createShortcuts(pool: pg.Pool, dryRun: boolean): Promise<number> 
   return count
 }
 
-// ── Step 3: Flag isolated entities ──
-
 async function flagIsolated(pool: pg.Pool, dryRun: boolean): Promise<number> {
   if (dryRun) {
     const { rows } = await pool.query<{ name: string; type: string }>(`
@@ -197,8 +188,6 @@ async function flagIsolated(pool: pg.Pool, dryRun: boolean): Promise<number> {
   `)
   return rowCount ?? 0
 }
-
-// ── Step 4: Extract meta-patterns via Claude CLI ──
 
 async function extractMetaPatterns(pool: pg.Pool, dryRun: boolean): Promise<number> {
   // Get entity clusters by type
@@ -290,8 +279,6 @@ Max 5 patterns. Only suggest patterns backed by 3+ entities. Be specific, not ge
     return 0
   }
 }
-
-// ── Main ──
 
 async function main() {
   const { dryRun } = parseArgs()

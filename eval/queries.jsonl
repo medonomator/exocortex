@@ -1,0 +1,60 @@
+{"id":"q01","text":"SQLSTATE 40P01 in reconcileLedger again, how did we fix it last time?","project":"shop-api","kind":"keyword","relevant":{"c001":2}}
+{"id":"q02","text":"getting ERR_SSL_PROTOCOL_ERROR when i run admin locally","project":"admin","kind":"keyword","relevant":{"c090":2}}
+{"id":"q03","text":"next build keeps dying, do I need --max-old-space-size?","kind":"keyword","relevant":{"c032":2}}
+{"id":"q04","text":"PF-4012 on a refund, what does it mean","kind":"keyword","relevant":{"c015":2}}
+{"id":"q05","text":"lots of BadDeviceToken errors from apns","kind":"keyword","relevant":{"c037":2}}
+{"id":"q06","text":"Vector dimension error: expected dim: 1536, got 512","project":"ml","kind":"keyword","relevant":{"c209":2,"c210":1,"c076":1}}
+{"id":"q07","text":"nodes failing with toomanyrequests pull rate limit","project":"infra","kind":"keyword","relevant":{"c218":2}}
+{"id":"q08","text":"why is the keychain item set to kSecAttrAccessibleAfterFirstUnlock","kind":"keyword","relevant":{"c195":2}}
+{"id":"q09","text":"why is priceTable behind an atomic.Pointer","project":"shop-api","kind":"keyword","relevant":{"c187":2}}
+{"id":"q10","text":"ingress returns 400 broken header, use-proxy-protocol related?","kind":"keyword","relevant":{"c159":2,"c158":1}}
+{"id":"q11","text":"got a Guideline 5.1.1 rejection, what did we do last time","project":"shop-ios","kind":"keyword","relevant":{"c039":2,"c137":1}}
+{"id":"q12","text":"Too many open files in qdrant","kind":"keyword","relevant":{"c207":2}}
+{"id":"q13","text":"people on office wifi can't use the iphone app at all, some secure connection thing","project":"shop-ios","kind":"paraphrase","relevant":{"c089":2}}
+{"id":"q14","text":"why does the same purchase sometimes get booked twice when the payment provider calls us back","project":"shop-api","kind":"paraphrase","relevant":{"c005":2,"c016":1}}
+{"id":"q15","text":"how long until a fresh build reaches beta folks outside the company?","kind":"paraphrase","relevant":{"c042":2}}
+{"id":"q16","text":"the overnight money matching job is super slow","project":"shop-api","kind":"paraphrase","relevant":{"c117":2}}
+{"id":"q17","text":"how do we make sure we can bring the main database back quickly if it dies","project":"infra","kind":"paraphrase","relevant":{"c092":2,"c095":2,"c093":1}}
+{"id":"q18","text":"files we deleted still come back in the assistant's results","project":"ml","kind":"paraphrase","relevant":{"c079":2}}
+{"id":"q19","text":"what's my preferred way to talk to the db in go","kind":"paraphrase","relevant":{"c108":2}}
+{"id":"q20","text":"the web back office hangs when it shows huge lists of purchases","kind":"paraphrase","relevant":{"c148":2}}
+{"id":"q21","text":"how did we get the phone app to open faster","kind":"paraphrase","relevant":{"c136":2}}
+{"id":"q22","text":"why were customers signed out of the mobile app for no reason","kind":"paraphrase","relevant":{"c009":2,"c195":2,"c011":1}}
+{"id":"q23","text":"we were paying too much to turn text into vectors, what did we do about it","project":"ml","kind":"paraphrase","relevant":{"c024":2}}
+{"id":"q24","text":"how do we see the real visitor address when traffic comes through the hetzner balancer","kind":"paraphrase","relevant":{"c158":2,"c159":1}}
+{"id":"q25","text":"a phone release blew up instantly for people on an older OS, what happened","project":"shop-ios","kind":"paraphrase","relevant":{"c084":2,"c127":1}}
+{"id":"q26","text":"why did keeping product data in each pod's own memory go wrong","project":"shop-api","kind":"paraphrase","relevant":{"c007":2,"c006":1}}
+{"id":"q27","text":"our monitoring storage blew up after we started tagging requests per customer","kind":"paraphrase","relevant":{"c052":2}}
+{"id":"q28","text":"what's my rule for how big a change can be before I ask someone to look at it","kind":"paraphrase","relevant":{"c096":2,"c097":1}}
+{"id":"q29","text":"how did we stop strangers spamming the login code endpoint","project":"shop-api","kind":"paraphrase","relevant":{"c047":2}}
+{"id":"q30","text":"why were we woken up by a short outage page each night","kind":"paraphrase","relevant":{"c165":2}}
+{"id":"q31","text":"a malicious line inside an uploaded file made the bot leak its instructions","project":"ml","kind":"paraphrase","relevant":{"c177":2}}
+{"id":"q32","text":"text in german doesn't fit on the buttons","kind":"paraphrase","relevant":{"c067":2}}
+{"id":"q33","text":"deadlock again?","project":"shop-api","kind":"short","relevant":{"c001":2}}
+{"id":"q34","text":"push certs expiry","project":"shop-ios","kind":"short","relevant":{"c036":2}}
+{"id":"q35","text":"hpa not scaling","kind":"short","relevant":{"c206":2}}
+{"id":"q36","text":"flaky tests causes","kind":"short","relevant":{"c030":2,"c026":1,"c027":1,"c028":1}}
+{"id":"q37","text":"kafka lag","project":"shop-api","kind":"short","relevant":{"c111":2}}
+{"id":"q38","text":"staging costs","project":"infra","kind":"short","relevant":{"c056":2,"c057":2,"c059":1}}
+{"id":"q39","text":"qdrant recall low","project":"ml","kind":"short","relevant":{"c173":2,"c072":1,"c180":1}}
+{"id":"q40","text":"heic uploads","kind":"short","relevant":{"c045":2}}
+{"id":"q41","text":"universal links broken","kind":"short","relevant":{"c131":2}}
+{"id":"q42","text":"wal disk full","kind":"short","relevant":{"c202":2}}
+{"id":"q43","text":"admin bundle size","project":"admin","kind":"short","relevant":{"c199":2}}
+{"id":"q44","text":"dns ttl","kind":"short","relevant":{"c085":2}}
+{"id":"q45","text":"what did we decide about caching the product catalog and why did the first approach fail","project":"shop-api","kind":"multi","relevant":{"c006":2,"c007":2,"c008":1}}
+{"id":"q46","text":"product search: why didn't we go with elasticsearch and what did we do instead","project":"shop-api","kind":"multi","relevant":{"c074":2,"c071":2}}
+{"id":"q47","text":"how does a new secret get from vault into a running pod, and what broke last time we forgot one","project":"infra","kind":"multi","relevant":{"c163":2,"c080":2,"c219":1,"c083":1}}
+{"id":"q48","text":"full story of the embedding model switch: what we started with, what we moved to, and the dimension error","project":"ml","kind":"multi","relevant":{"c075":2,"c076":2,"c209":2,"c210":1}}
+{"id":"q49","text":"how did the admin stack evolve from the redux days to now","project":"admin","kind":"multi","relevant":{"c141":2,"c140":1,"c139":1}}
+{"id":"q50","text":"payflux webhooks: how are they signed and what do we do when they turn off our endpoint","project":"shop-api","kind":"multi","relevant":{"c004":2,"c214":2,"c213":1,"c120":1}}
+{"id":"q51","text":"how is the image pipeline wired end to end, from the admin upload to the resized variants","kind":"multi","relevant":{"c044":2,"c046":2,"c043":1,"c198":1}}
+{"id":"q52","text":"feature flags history: what did we use before unleash and how do we clean up old flags","project":"shop-api","kind":"multi","relevant":{"c212":2,"c065":2,"c063":1}}
+{"id":"q53","text":"what is a monad","kind":"negative","relevant":{}}
+{"id":"q54","text":"how do i set up graphql federation between two services","kind":"negative","relevant":{}}
+{"id":"q55","text":"android push notifications with FCM, how did we set it up","kind":"negative","relevant":{}}
+{"id":"q56","text":"difference between tcp and udp","kind":"negative","relevant":{}}
+{"id":"q57","text":"how did we configure the kafka schema registry with avro","project":"shop-api","kind":"negative","relevant":{}}
+{"id":"q58","text":"explain the CAP theorem quickly","kind":"negative","relevant":{}}
+{"id":"q59","text":"did we ever migrate anything to mongodb?","kind":"negative","relevant":{}}
+{"id":"q60","text":"best practice for websocket reconnection in the admin panel","project":"admin","kind":"negative","relevant":{}}

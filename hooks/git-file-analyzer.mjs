@@ -19,10 +19,6 @@ import { loadEnv } from './env-loader.mjs'
 
 loadEnv()
 
-// ═══════════════════════════════════════════
-// Args
-// ═══════════════════════════════════════════
-
 const args = Object.fromEntries(
   process.argv.slice(2).map(a => {
     const [k, v] = a.replace(/^--/, '').split('=')
@@ -40,10 +36,6 @@ if (!REPO) {
   console.error('Usage: node git-file-analyzer.mjs --repo=/path/to/repo')
   process.exit(1)
 }
-
-// ═══════════════════════════════════════════
-// Git helpers
-// ═══════════════════════════════════════════
 
 function git(cmd) {
   return execSync(`git -C "${REPO}" ${cmd}`, {
@@ -72,10 +64,6 @@ function getFilesForCommit(hash) {
     return []
   }
 }
-
-// ═══════════════════════════════════════════
-// Analysis
-// ═══════════════════════════════════════════
 
 function isBugFix(subject) {
   const lower = subject.toLowerCase()
@@ -187,10 +175,6 @@ function buildFileIndex(commits) {
 
   return { index, stats: { files: Object.keys(index).length, hotspots, withCompanions } }
 }
-
-// ═══════════════════════════════════════════
-// Main
-// ═══════════════════════════════════════════
 
 console.log(`Analyzing git history: ${REPO}`)
 console.log(`Since: ${SINCE}`)

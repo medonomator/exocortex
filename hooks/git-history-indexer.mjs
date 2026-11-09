@@ -19,7 +19,6 @@ import {
   buildCommitPayload,
 } from './git-commit-helpers.mjs'
 
-// ── Args ────────────────────────────────────────────────────────────────
 const args = Object.fromEntries(
   process.argv.slice(2).map((a) => {
     const [k, v] = a.replace(/^--/, '').split('=')
@@ -40,7 +39,6 @@ if (!process.env.OPENAI_API_KEY) {
   process.exit(1)
 }
 
-// ── Main ────────────────────────────────────────────────────────────────
 async function main() {
   console.log(`Indexing git history: ${REPO}`)
   console.log(`Since: ${SINCE} | Project: ${PROJECT}`)

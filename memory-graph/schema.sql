@@ -42,9 +42,6 @@ CREATE INDEX IF NOT EXISTS idx_kg_entities_last_seen ON kg_entities(last_seen);
 -- Formula: confidence = confidence * 0.95 for every 7 days since last_seen
 -- Minimum confidence floor: 0.1 (never fully delete, just deprioritize)
 
--- ═══════════════════════════════════════════
--- Procedural Memory — "how to do things"
--- ═══════════════════════════════════════════
 -- Stores verified patterns extracted from sessions:
 -- "When X happens → do Y" with success tracking.
 -- Complements kg_entities (semantic: what is known)

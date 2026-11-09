@@ -1,4 +1,3 @@
--- ═════════════════════════════════════════════════════════════════════════
 -- Migration 006: mem_calibration
 --
 -- Tracks predicted confidence vs actual outcomes. For each procedure that
@@ -8,7 +7,6 @@
 --   • Adjust Beta priors for future items
 --   • Surface poorly-calibrated subsets (e.g. "Claude's confidence is
 --     systematically too high for Docker-related procedures")
--- ═════════════════════════════════════════════════════════════════════════
 
 CREATE TABLE IF NOT EXISTS mem_calibration (
   id               UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

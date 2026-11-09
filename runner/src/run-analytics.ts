@@ -25,8 +25,6 @@ import { LangfuseLlmWrapper } from './langfuse-llm-wrapper.js'
 import type { SwarmAgentDef, SignalType } from '@cognitive-swarm/core'
 import type { EngineConfig } from '@cognitive-engine/core'
 
-// ── Config ──
-
 const API_KEY = process.env['OPENAI_API_KEY'] ?? ''
 if (!API_KEY) throw new Error('OPENAI_API_KEY not set')
 
@@ -34,8 +32,6 @@ const MODEL = 'gpt-5.4-mini'
 const SYNTH_MODEL = 'gpt-5.4'
 const DATA_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'swarm-data')
 const RESULTS_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', 'results')
-
-// ── Strategic analyst agents ──
 
 function createAnalystAgents(engine: EngineConfig): SwarmAgentDef[] {
   const base = {
@@ -113,8 +109,6 @@ function createAnalystAgents(engine: EngineConfig): SwarmAgentDef[] {
   ]
 }
 
-// ── Synthesizer prompt ──
-
 const synthesizerPrompt = `You are compiling a TRADE-OFF MAP from a heated multi-agent strategic debate about a product's direction.
 
 The agents debated THREE possible paths:
@@ -172,12 +166,8 @@ CRITICAL RULES:
 Write in RUSSIAN with technical terms in English. Be specific — cite numbers from agent briefings.
 Use plain text, no markdown formatting.`
 
-// ── CLI flags ──
-
 const CHEAP_MODE = process.argv.includes('--cheap')
 const SKIP_SYNTHESIS = process.argv.includes('--no-synth')
-
-// ── Main ──
 
 async function main() {
   console.log('🧠 Swarm Strategic Analysis')
@@ -272,7 +262,6 @@ async function main() {
   const swarmTokens = rawLlm.tokensUsed + rawSynthLlm.tokensUsed
   console.log(`   Swarm done in ${duration}s (signals: ${result.signalLog.length}, rounds: ${result.timing.roundsUsed}, tokens: ${swarmTokens})`)
 
-  // ── Chain synthesis with gpt-5.4 ──
   let synthTokens = 0
   let chainData: ChainSynthesisResult | null = null
   const shouldSynthesize = !CHEAP_MODE && !SKIP_SYNTHESIS && result.signalLog.length > 10
@@ -299,14 +288,12 @@ async function main() {
     }
   }
 
-  // ── Cost ──
   const baseCost = swarmTokens * 0.00000075 // gpt-5.4-mini
   const synthCost = synthTokens * 0.000005   // gpt-5.4
   const totalCost = baseCost + synthCost
   console.log(`   Tokens: ${swarmTokens} (swarm) + ${synthTokens} (${SYNTH_MODEL} synthesis) = ${swarmTokens + synthTokens}`)
   console.log(`   Cost: $${totalCost.toFixed(4)} (swarm: $${baseCost.toFixed(4)}, synthesis: $${synthCost.toFixed(4)})`)
 
-  // ── Save results ──
   if (!existsSync(RESULTS_DIR)) mkdirSync(RESULTS_DIR, { recursive: true })
 
   const contributions = Object.fromEntries(

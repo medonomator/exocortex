@@ -1,4 +1,3 @@
--- ═════════════════════════════════════════════════════════════════════════
 -- Migration 008: mem_recall_log
 --
 -- Feedback signal for auto-importance learning. Every recall writes one row
@@ -19,7 +18,6 @@
 --
 -- Append-style; rows are updated once (when acked or decayed) then kept for
 -- audit. Prune old rows via a cron if table grows too large.
--- ═════════════════════════════════════════════════════════════════════════
 
 CREATE TABLE IF NOT EXISTS mem_recall_log (
   id           BIGSERIAL PRIMARY KEY,

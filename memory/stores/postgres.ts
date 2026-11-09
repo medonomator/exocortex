@@ -45,8 +45,6 @@ export interface ItemFilter {
   offset?: number;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-
 export class PostgresStore {
   private readonly pool: Pool;
 
@@ -64,8 +62,6 @@ export class PostgresStore {
   async close(): Promise<void> {
     await this.pool.end();
   }
-
-  // ── Items ───────────────────────────────────────────────────────────────
 
   async upsertItem(item: MemoryItem): Promise<void> {
     const sql = `
@@ -210,8 +206,6 @@ export class PostgresStore {
     );
   }
 
-  // ── Lexical / full-text candidate retrieval ──────────────────────────────
-
   /**
    * Returns item IDs + raw tsv rank, for use as a sparse retrieval signal.
    * Restricted to active items only for hot-path recall.
@@ -263,8 +257,6 @@ export class PostgresStore {
     return res.rows.map((r) => ({ id: r.id, score: Number(r.score) }));
   }
 
-  // ── Item ↔ Entity links (graph-first retrieval) ─────────────────────────
-
   /**
    * Scan text for occurrences of known kg_entities names and link the given
    * item to every entity whose name appears verbatim. Idempotent - dupes are
@@ -303,8 +295,6 @@ export class PostgresStore {
     const res = await this.pool.query(sql, [itemId, text]);
     return res.rowCount ?? 0;
   }
-
-  // ── Events ──────────────────────────────────────────────────────────────
 
   async insertEvent(event: MemoryEvent, resultingItemId?: string, action?: string): Promise<void> {
     const sql = `
@@ -346,8 +336,6 @@ export class PostgresStore {
     return res.rows.map(rowToEvent);
   }
 
-  // ── Lineage ─────────────────────────────────────────────────────────────
-
   async addLineage(parentId: string, childId: string, relation = 'derived'): Promise<void> {
     await this.pool.query(
       `INSERT INTO mem_lineage (parent_id, child_id, relation) VALUES ($1, $2, $3)
@@ -372,8 +360,6 @@ export class PostgresStore {
     return res.rows.map((r) => r.parent_id);
   }
 
-  // ── Forgetting log ──────────────────────────────────────────────────────
-
   async logForgetting(
     itemId: string,
     policy: string,
@@ -389,8 +375,6 @@ export class PostgresStore {
     );
   }
 
-  // ── Raw query escape hatch ──────────────────────────────────────────────
-
   async withClient<T>(fn: (c: PoolClient) => Promise<T>): Promise<T> {
     const client = await this.pool.connect();
     try {
@@ -400,10 +384,6 @@ export class PostgresStore {
     }
   }
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Row mappers
-// ─────────────────────────────────────────────────────────────────────────────
 
 interface ItemRow {
   id: string;

@@ -277,10 +277,6 @@ export class GraphStore {
     }
   }
 
-  // ═══════════════════════════════════════════
-  // Procedural Memory
-  // ═══════════════════════════════════════════
-
   async upsertProcedure(input: ProcedureInput): Promise<string> {
     const result = await this.pool.query<{ id: string }>(`
       INSERT INTO kg_procedures (pattern, trigger_condition, action, project, tags, source_type, confidence, metadata)

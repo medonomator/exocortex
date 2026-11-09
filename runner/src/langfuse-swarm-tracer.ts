@@ -152,8 +152,6 @@ export class LangfuseSwarmTracer {
     }
   }
 
-  // ── Private: event group subscriptions ──
-
   private attachRoundEvents(orchestrator: SwarmOrchestrator): void {
     this.subscribe(orchestrator, 'round:start', (data) => {
       if (!this.trace) return
@@ -309,8 +307,6 @@ export class LangfuseSwarmTracer {
       this.emitRoundEvent('topology:updated', { reason: data.reason })
     })
   }
-
-  // ── Private: helpers ──
 
   /** Type-safe subscription that stores cleanup and wraps in try-catch. */
   private subscribe<K extends keyof SwarmEventMap & string>(

@@ -1,9 +1,6 @@
 import type { EntityInput, RelationInput, EntityType, RelationType } from '../../memory-graph/src/types.js'
 import type { LlmProvider } from './types.js'
 
-// ═══════════════════════════════════════════
-// Entity Extractor — Post-swarm GPT call
-// ═══════════════════════════════════════════
 // Takes the swarm's analysis text and extracts
 // structured entities + relations for the knowledge graph.
 

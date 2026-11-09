@@ -1,4 +1,3 @@
--- ═════════════════════════════════════════════════════════════════════════
 -- Migration 007: Compatibility views over existing kg_* tables
 --
 -- We do NOT migrate kg_entities / kg_relations / kg_procedures physically.
@@ -8,7 +7,6 @@
 -- Write path: new events go into mem_items. Reads: UNION over both.
 -- Physical migration is deferred - can be done later if and when we
 -- decommission kg_*.
--- ═════════════════════════════════════════════════════════════════════════
 
 -- Procedures → mem_items-shaped view
 CREATE OR REPLACE VIEW mem_items_compat_procedures AS

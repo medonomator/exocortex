@@ -1,9 +1,6 @@
 import type { GraphStore } from '../../memory-graph/src/graph-store.js'
 import type { LlmProvider } from './types.js'
 
-// ═══════════════════════════════════════════
-// Contradiction Detector — Post-entity-extraction
-// ═══════════════════════════════════════════
 // Compares new decisions against recent decisions in the graph
 // using semantic batch comparison (not just exact name match).
 

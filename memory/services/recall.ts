@@ -170,6 +170,7 @@ export class RecallService {
     // yesterday" naturally means "items created yesterday". Using
     // lastAccessedAt would let any recently-reinforced old item leak through.
     const filtered = candidates.filter((c) => {
+      if (query.types && !query.types.includes(c.type)) return false;
       if (query.levels && !query.levels.includes(c.level)) return false;
       if (query.since && c.createdAt < query.since) return false;
       if (query.until && c.createdAt > query.until) return false;

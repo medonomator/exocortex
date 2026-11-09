@@ -14,10 +14,6 @@ import type {
 } from './types.js';
 import type { Plugin } from './registry.js';
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Signal (ranking)
-// ─────────────────────────────────────────────────────────────────────────────
-
 /**
  * A signal produces per-candidate scores for a given query.
  * Scores are returned in the order of the provided candidates array,
@@ -37,10 +33,6 @@ export interface SignalContext {
   /** Time to use as "now" for recency / decay calculations. */
   now: Date;
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Policy (lifecycle mutation)
-// ─────────────────────────────────────────────────────────────────────────────
 
 /**
  * A policy mutates items based on rules (decay, archive, promote, ...).
@@ -72,10 +64,6 @@ export interface PolicyOutcome {
   /** Counts of status transitions this policy performed. */
   transitions: Partial<Record<LifecycleStatus, number>>;
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Pipeline stage (consolidate)
-// ─────────────────────────────────────────────────────────────────────────────
 
 /**
  * A pipeline stage transforms events/items into more refined items.

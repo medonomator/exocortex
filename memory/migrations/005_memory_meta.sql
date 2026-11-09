@@ -1,4 +1,3 @@
--- ═════════════════════════════════════════════════════════════════════════
 -- Migration 005: mem_meta_snapshots
 --
 -- Daily snapshots of aggregate memory metrics. Populated by introspect.health()
@@ -6,7 +5,6 @@
 --   • Drift detection (how distributions change over time)
 --   • Morning briefing: "your memory state today vs last week"
 --   • Trigger warnings when bloat / contradiction count spikes
--- ═════════════════════════════════════════════════════════════════════════
 
 CREATE TABLE IF NOT EXISTS mem_meta_snapshots (
   id                  UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

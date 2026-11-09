@@ -1,4 +1,3 @@
--- ═════════════════════════════════════════════════════════════════════════
 -- Migration 003: mem_lineage
 --
 -- Explicit derivedFrom edges between items. Duplicates what's in
@@ -7,7 +6,6 @@
 -- from this episode").
 --
 -- Populated automatically by ingest / consolidate services.
--- ═════════════════════════════════════════════════════════════════════════
 
 CREATE TABLE IF NOT EXISTS mem_lineage (
   parent_id   UUID NOT NULL REFERENCES mem_items(id) ON DELETE CASCADE,

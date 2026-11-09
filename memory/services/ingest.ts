@@ -155,8 +155,6 @@ export class IngestService {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-
 function buildItem(args: {
   id: string;
   type: ItemType;

@@ -4,9 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "tsx src/run.ts",
-    "start:daily": "tsx src/run.ts --hours=24 --no-telegram",
-    "start:weekly": "tsx src/run.ts --hours=168"
+    "observe": "tsx src/run-claude.ts",
+    "observe:swarm": "tsx src/run-swarm.ts"
   },
   "dependencies": {
     "@cognitive-engine/core": "^0.2.0",

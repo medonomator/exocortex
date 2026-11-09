@@ -140,8 +140,6 @@ export class QdrantStore {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-
 export interface QdrantFilter {
   types?: ItemType[];
   statuses?: LifecycleStatus[];

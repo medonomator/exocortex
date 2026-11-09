@@ -10,7 +10,7 @@ dotenv.config({ path: join(dirname(fileURLToPath(import.meta.url)), '..', '..', 
 // cognitive-swarm imports (npm packages)
 import { SwarmOrchestrator } from '@cognitive-swarm/orchestrator'
 
-// observer modules (local — moved from cognitive-swarm after observer package removal)
+// observer modules (local, moved from cognitive-swarm after the observer package was removed)
 import {
   OpenAiLlmProvider,
   OpenAiEmbeddingProvider,
@@ -33,19 +33,13 @@ import { LangfuseSwarmTracer } from './langfuse-swarm-tracer.js'
 import { LangfuseLlmWrapper } from './langfuse-llm-wrapper.js'
 
 
-// ═══════════════════════════════════════════
-// Exocortex Runner — Extended Claude Observer
-// ═══════════════════════════════════════════
-//
-// Extends cognitive-swarm observer with:
-// - Entity extraction → PostgreSQL knowledge graph
-// - Contradiction detection
+// Multi-agent session observer built on cognitive-swarm.
 //
 // Usage:
-//   tsx src/run.ts              — analyze last 24h, send report
-//   tsx src/run.ts --hours=48   — analyze last 48h
-//   tsx src/run.ts --no-telegram - save to graph only
-//   tsx src/run.ts --verbose    — show full swarm output
+//   tsx src/run-swarm.ts               analyze last 24h, send report
+//   tsx src/run-swarm.ts --hours=48    analyze last 48h
+//   tsx src/run-swarm.ts --no-telegram save to graph only
+//   tsx src/run-swarm.ts --verbose     show full swarm output
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
@@ -106,7 +100,6 @@ async function main() {
     console.log(`   Last run: ${state.lastRunAt} (${state.totalInsights} insights, ${state.totalEntities ?? 0} entities)`)
   }
 
-  // ── Load conversations (with deduplication) ──
   const allConversations = loadRecentConversations(hours)
   const processedSet = new Set(state?.processedFiles ?? [])
   const conversations = allConversations.filter(c => !processedSet.has(c.filePath))
@@ -123,7 +116,6 @@ async function main() {
 
   console.log(`   Found ${conversations.length} new conversations (${totalMessages} messages, ${totalTokens.toLocaleString()} tokens)${skippedCount > 0 ? ` [${skippedCount} skipped as duplicates]` : ''}`)
 
-  // ── Build analysis task ──
   const task = buildAnalysisTask(conversations)
 
   if (verbose) {
@@ -132,7 +124,6 @@ async function main() {
     console.log('...\n')
   }
 
-  // ── Set up swarm (same as original observer) ──
   const MODEL = 'gpt-5.4-mini'
   const rawLlm = new OpenAiLlmProvider(API_KEY, MODEL)
   const llm = new LangfuseLlmWrapper(rawLlm, MODEL)
@@ -176,7 +167,6 @@ Use plain text, no markdown formatting.`
   const orchConsensus = { strategy: 'confidence-weighted' as const, threshold: 0.3 }
   const orchMath = { entropyThreshold: 0.3, minInformationGain: 0.03, redundancyThreshold: 0.5 }
 
-  // ── Observability: Langfuse ──
   const tracer = new LangfuseTracer()
   await tracer.init()
 
@@ -204,7 +194,6 @@ Use plain text, no markdown formatting.`
     agentSelection: { topK: 3 },
   })
 
-  // ── Run swarm analysis ──
   const MAX_COST_USD = 0.50
   const HARD_TIMEOUT_MS = 600_000
 
@@ -263,13 +252,12 @@ Use plain text, no markdown formatting.`
 
   console.log(`   Swarm done in ${swarmDuration}s (signals: ${result.signalLog.length}, rounds: ${result.timing.roundsUsed}, tokens: ${swarmTokens})`)
 
-  // Shared post-solve LLM provider — tracks ALL post-solve tokens in one place
+  // Shared post-solve LLM provider. Tracks ALL post-solve tokens in one place
   const postSolveLlm = new OpenAiLlmProvider(API_KEY, MODEL)
   const postSolveWrapped = new LangfuseLlmWrapper(postSolveLlm, MODEL)
   postSolveWrapped.setTrace(swarmTracer.getTrace())
 
-  // ── Chain synthesis for high-signal runs ──
-  // Use gpt-5.4 for final synthesis — one smart call to distill the debate
+  // Use gpt-5.4 for final synthesis. One smart call to distill the debate
   const SYNTH_MODEL = 'gpt-5.4'
   let synthFinalTokens = 0
   if (result.signalLog.length > 25) {
@@ -299,9 +287,6 @@ Use plain text, no markdown formatting.`
     synthFinalTokens = synthFinalLlm.tokensUsed
   }
 
-  // ═══════════════════════════════════════════
-  // NEW: Entity extraction → Knowledge Graph
-  // ═══════════════════════════════════════════
   const graphStore = new GraphStore()
   let entityCount = 0
   let relationCount = 0
@@ -321,9 +306,6 @@ Use plain text, no markdown formatting.`
       console.log('   No entities extracted')
     }
 
-    // ═══════════════════════════════════════════
-    // Procedural memory extraction
-    // ═══════════════════════════════════════════
     const procSpan = tracer.startSpan('procedure-extraction')
     try {
       const procedures = await extractProcedures(postSolveWrapped, result.answer)
@@ -339,9 +321,6 @@ Use plain text, no markdown formatting.`
       console.log(`   ⚠️ Procedure extraction failed: ${err instanceof Error ? err.message : String(err)}`)
     }
 
-    // ═══════════════════════════════════════════
-    // Confidence decay + pruning
-    // ═══════════════════════════════════════════
     const decayed = await graphStore.applyConfidenceDecay()
     if (decayed > 0) console.log(`   Confidence decay applied to ${decayed} stale entities`)
 
@@ -351,9 +330,6 @@ Use plain text, no markdown formatting.`
     const pruned = await graphStore.pruneStale()
     if (pruned > 0) console.log(`   Pruned ${pruned} stale entities (confidence < 0.15, age > 60d)`)
 
-    // ═══════════════════════════════════════════
-    // Contradiction detection
-    // ═══════════════════════════════════════════
     const decisions = extracted.entities.filter(e => e.type === 'decision')
     let contradictionCount = 0
     if (decisions.length > 0) {
@@ -380,8 +356,6 @@ Use plain text, no markdown formatting.`
     await graphStore.close()
   }
 
-  // ═══════════════════════════════════════════
-  // ── Session log analysis ──
   const sessionStats = analyzeSessionLogs(hours)
   if (sessionStats) {
     const statsText = formatSessionStats(sessionStats)
@@ -389,7 +363,6 @@ Use plain text, no markdown formatting.`
     reportText += '\n\n' + statsText
   }
 
-  // ── Cost summary ──
   const postSolveTokens = postSolveLlm.tokensUsed
   const totalTokensUsed = swarmTokens + postSolveTokens
   const baseCost = totalTokensUsed * 0.00000075 // gpt-5.4-mini rate
@@ -399,10 +372,8 @@ Use plain text, no markdown formatting.`
   console.log(`   Tokens: ${swarmTokens} (swarm) + ${postSolveTokens} (post-solve)${synthFinalTokens > 0 ? ` + ${synthFinalTokens} (${SYNTH_MODEL} synthesis)` : ''} = ${totalTokensUsed + synthFinalTokens}`)
   console.log(`   Total cost: $${totalCost.toFixed(4)}${synthCost > 0 ? ` (incl. $${synthCost.toFixed(4)} ${SYNTH_MODEL} synthesis)` : ''}`)
 
-  // ── Finalize swarm tracer (after all post-solve LLM calls are recorded) ──
   swarmTracer.finalize(result)
 
-  // ── Langfuse scores & finalize ──
   tracer.scoreTrace({
     confidence: result.confidence,
     signal_density: result.signalLog.length / result.timing.roundsUsed,
@@ -414,7 +385,6 @@ Use plain text, no markdown formatting.`
     rounds_used: result.timing.roundsUsed,
   })
 
-  // ── Send to Telegram ──
   if (!dryRun && !noTelegram) {
     console.log('   Sending report to Telegram...')
 
@@ -439,7 +409,6 @@ Use plain text, no markdown formatting.`
     console.log(reportText)
   }
 
-  // ── Save state (with dedup tracking, keep last 200 files) ──
   const newProcessedFiles = conversations.map(c => c.filePath)
   const allProcessed = [...(state?.processedFiles ?? []), ...newProcessedFiles].slice(-200)
   saveState({
@@ -451,7 +420,6 @@ Use plain text, no markdown formatting.`
     processedFiles: allProcessed,
   })
 
-  // ── Save raw results ──
   mkdirSync(RESULTS_DIR, { recursive: true })
   const filename = join(RESULTS_DIR, `observer-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.json`)
   // Convert agentContributions Map to plain object for JSON serialization
@@ -494,7 +462,6 @@ Use plain text, no markdown formatting.`
   )
   console.log(`   Results saved to ${filename}`)
 
-  // ── Observability finalize ──
   await tracer.finalize({
     report: reportText,
     entities: entityCount,

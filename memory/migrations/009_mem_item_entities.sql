@@ -1,4 +1,3 @@
--- ═════════════════════════════════════════════════════════════════════════
 -- Migration 009: mem_item_entities
 --
 -- M:N link between mem_items and kg_entities. Enables graph-first retrieval:
@@ -15,7 +14,6 @@
 --
 -- The cross-db FK (mem_items → kg_entities) is fine here because both
 -- tables live in the same Postgres instance.
--- ═════════════════════════════════════════════════════════════════════════
 
 CREATE TABLE IF NOT EXISTS mem_item_entities (
   item_id     UUID NOT NULL REFERENCES mem_items(id) ON DELETE CASCADE,

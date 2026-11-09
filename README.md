@@ -13,6 +13,23 @@ Long-term memory for [Claude Code](https://docs.anthropic.com/en/docs/claude-cod
 - **Builds a knowledge graph.** A nightly observer reads session transcripts and extracts projects, decisions, bugs and technologies. It also flags new decisions that contradict old ones.
 - **Sends briefings.** A daily report and a morning summary go to Telegram.
 
+## Example
+
+You ask "SQLSTATE 40P01 in reconcileLedger again, how did we fix it last time?" in a `shop-api` session. Before the model sees the prompt, the recall hook adds this to its context:
+
+```text
+EXOCORTEX MEMORY RECALL:
+
+SEMANTIC MEMORY (exocortex):
+[Memory 1] (episode, shop-api, cosine: 0.676):
+Fixed deadlock in reconcileLedger: two workers updated ledger_entries and account_balances in opposite order and Postgres aborted one with SQLSTATE 40P01. Both paths now lock account_balances first via SELECT ... FOR UPDATE ORDER BY account_id.
+
+[Memory 2] (episode, shop-api, cosine: 0.562):
+The nightly reconcileLedger cron took 47 minutes. Rewrote it to walk accounts in batches of 500 with a cursor and run 4 batches in parallel; it now finishes in 6 minutes.
+```
+
+The block comes from the synthetic eval corpus, not from real sessions. Reproduce it with `npm run eval -- --demo "<query>" --project shop-api`.
+
 ## Architecture
 
 ```
@@ -76,7 +93,7 @@ npm run db:init
 npm run check
 ```
 
-`db:up` starts Postgres and Qdrant from `docker-compose.yml`. `db:init` applies the graph schema and the memory migrations. `check` runs the typecheck and the tests.
+The repo is an npm workspace (`memory`, `memory-graph`, `runner`) with one lockfile at the root. `db:up` starts Postgres and Qdrant from `docker-compose.yml`. `db:init` applies the graph schema and the memory migrations. `check` runs the typecheck and the tests. The tests run against in-memory stores from `memory/testing/`, so they need neither Docker nor an API key.
 
 ### Connect Claude Code
 
@@ -120,6 +137,7 @@ If your repo folder names don't match the project names stored in memory, map th
 
 ```bash
 npm run observe:daily      # analyze the last 24h of sessions
+npm run observe:swarm      # same analysis by a multi-agent cognitive-swarm debate
 npm run briefing           # morning summary from the graph, no LLM calls
 npm run consolidate        # merge duplicate entities, add shortcut relations
 npm run swarm:analyze      # performance analysis of past swarm runs
@@ -133,6 +151,32 @@ To index an existing repository's history:
 node hooks/git-history-indexer.mjs --repo=/path/to/repo --since="6 months ago"
 ```
 
+## Retrieval quality
+
+`eval/` holds a labeled benchmark. It has 220 synthetic memories across five projects and 60 queries: keyword, paraphrase, short, multi-hop and out-of-scope. The corpus deliberately includes superseded decisions, near-miss incidents and rare exact tokens. The eval runs the real `RecallService` against in-memory stores and applies the same gate the hook uses.
+
+| config | nDCG@10 | Recall@5 | MRR@10 |
+|---|---|---|---|
+| vector only | 0.898 | 0.920 | 0.915 |
+| hybrid (RRF, all signals) | 0.898 | 0.920 | 0.915 |
+| hybrid + HyDE | 0.901 | 0.921 | 0.931 |
+| hybrid + rerank | 0.944 | 0.950 | 0.966 |
+| hybrid + HyDE + rerank | 0.953 | 0.957 | 0.966 |
+
+The LLM rerank gives the biggest gain, mostly on paraphrased questions (nDCG 0.877 to 0.967). HyDE only helps short queries. Full tables, per-kind breakdown and gate counts are in [eval/results.md](eval/results.md).
+
+The benchmark also exposed two weak spots. They're left as is for now, so the numbers above describe the current behavior:
+
+- The lexical arm uses `plainto_tsquery('simple')`, which requires every word of the prompt to match. It returned anything for 2 of 52 queries, so hybrid scores the same as vector only. An OR query or BM25 over content words should fix that.
+- The hook's gate (top-1 cosine 0.55) is strict for `text-embedding-3-small`. It stays silent on all 8 out-of-scope queries. It also stays silent on 30 of the 52 answerable ones, even though the right memory is usually ranked first.
+
+```bash
+npm run eval:offline   # hash embeddings, no network, runs in CI
+npm run eval           # OpenAI embeddings plus gpt-4o-mini, a few cents, cached in eval/.cache
+```
+
+The lexical arm is emulated in-process with the same AND semantics as Postgres, so the eval needs no database.
+
 ## Configuration
 
 Everything is set through `.env`. The main variables are listed in [.env.example](.env.example). Recall can be tuned with these:
@@ -143,11 +187,6 @@ Everything is set through `.env`. The main variables are listed in [.env.example
 | `EXOCORTEX_LLM_RERANK` | on, `0` disables | Listwise rerank of the top results |
 | `EXOCORTEX_MIN_COSINE` | `0.50` | Minimum vector similarity to keep a hit |
 | `EXOCORTEX_EMBED_MODEL` | `text-embedding-3-small` | Embedding model |
-
-## Design notes
-
-- [Meta-cognitive mechanisms](docs/meta-cognitive-mechanisms.md)
-- [Next-gen memory architecture](docs/next-gen-memory-architecture.md)
 
 ## License
 

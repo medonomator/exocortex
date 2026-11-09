@@ -20,7 +20,11 @@ npm run db:up
 npm run db:init
 ```
 
-Fill in your API keys in `.env`. Run `npm run check` before opening a PR. It runs the typecheck and the tests, same as CI.
+The repo is an npm workspace (`memory`, `memory-graph`, `runner`) with a single lockfile at the root. Install from the root only.
+
+Fill in your API keys in `.env`. Run `npm run check` before opening a PR. It runs the typecheck and the tests, same as CI. The unit tests use in-memory stores from `memory/testing/`, so they don't need Docker or API keys.
+
+If you touch retrieval or ranking, run `npm run eval:offline` and compare against `eval/results.md`. `npm run eval` runs the same suite with real embeddings and costs a few cents.
 
 ## Code Style
 

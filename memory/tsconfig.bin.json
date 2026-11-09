@@ -4,5 +4,6 @@
     "outDir": "./dist-bin",
     "noEmit": true
   },
-  "include": ["bin/**/*", "migrations/**/*", "index.ts"]
+  "exclude": ["dist", "node_modules"],
+  "include": ["bin/**/*", "migrations/**/*", "testing/**/*", "tests/**/*", "index.ts"]
 }

@@ -2,9 +2,6 @@ import { readFileSync, readdirSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { homedir } from 'node:os'
 
-// ═══════════════════════════════════════════
-// Session Log Analyzer
-// ═══════════════════════════════════════════
 // Parses session-YYYY-MM-DD.jsonl files to extract
 // usage patterns, tool failure rates, and session stats.
 

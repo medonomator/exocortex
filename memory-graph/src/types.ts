@@ -85,10 +85,6 @@ export type RelationType =
   | 'part_of'
   | 'related_to'
 
-// ═══════════════════════════════════════════
-// Procedural Memory
-// ═══════════════════════════════════════════
-
 export type ProcedureSourceType = 'swarm' | 'error-learner' | 'manual' | 'git-history'
 
 export interface ProcedureInput {
