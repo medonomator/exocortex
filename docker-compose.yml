@@ -2,9 +2,9 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_USER: ${PG_USER:-mindforge}
-      POSTGRES_PASSWORD: ${PG_PASSWORD:-mindforge123}
-      POSTGRES_DB: ${PG_DATABASE:-mindforge}
+      POSTGRES_USER: ${PG_USER:-exocortex}
+      POSTGRES_PASSWORD: ${PG_PASSWORD:?set PG_PASSWORD in .env}
+      POSTGRES_DB: ${PG_DATABASE:-exocortex}
     ports:
       - "${PG_PORT:-5433}:5432"
     volumes:

@@ -5,7 +5,7 @@
 -- abstraction). Type-specific data lives in `payload` JSONB.
 --
 -- Design notes:
---   • Prefix mem_ avoids collision with Prisma tables in shared mindforge DB.
+--   • Prefix mem_ keeps these tables apart from anything else in the same database.
 --   • Confidence is Beta(α, β) - two fields, not one scalar.
 --   • Lifecycle status is orthogonal to confidence.
 --   • Embeddings are NOT stored here - they live in Qdrant (cross-ref by id).

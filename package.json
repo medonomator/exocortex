@@ -23,7 +23,7 @@
     "check": "npm run typecheck && npm test",
     "eval": "tsx eval/run.ts",
     "eval:offline": "tsx eval/run.ts --offline",
-    "graph:init": "docker compose exec -T postgres psql -v ON_ERROR_STOP=1 -U mindforge -d mindforge < memory-graph/schema.sql",
+    "graph:init": "docker compose exec -T postgres sh -c 'psql -v ON_ERROR_STOP=1 -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\"' < memory-graph/schema.sql",
     "swarm:analyze": "cd runner && npx tsx src/swarm-analyze.ts",
     "swarm:analyze:dry": "cd runner && npx tsx src/swarm-analyze.ts --dry-run",
     "consolidate": "cd runner && npx tsx src/consolidate.ts",

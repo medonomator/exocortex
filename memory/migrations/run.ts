@@ -21,9 +21,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const PG = {
   host: process.env.PG_HOST ?? 'localhost',
   port: Number(process.env.PG_PORT ?? 5433),
-  user: process.env.PG_USER ?? 'mindforge',
-  password: process.env.PG_PASSWORD ?? 'mindforge123',
-  database: process.env.PG_DATABASE ?? 'mindforge',
+  user: process.env.PG_USER,
+  password: process.env.PG_PASSWORD,
+  database: process.env.PG_DATABASE,
 };
 
 const ENSURE_TABLE = `

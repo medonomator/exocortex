@@ -52,9 +52,9 @@ export class PostgresStore {
     this.pool = new Pool({
       host: opts.host ?? process.env.PG_HOST ?? 'localhost',
       port: opts.port ?? Number(process.env.PG_PORT ?? 5433),
-      user: opts.user ?? process.env.PG_USER ?? 'mindforge',
-      password: opts.password ?? process.env.PG_PASSWORD ?? 'mindforge123',
-      database: opts.database ?? process.env.PG_DATABASE ?? 'mindforge',
+      user: opts.user ?? process.env.PG_USER,
+      password: opts.password ?? process.env.PG_PASSWORD,
+      database: opts.database ?? process.env.PG_DATABASE,
       max: opts.poolSize ?? 10,
     });
   }

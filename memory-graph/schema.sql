@@ -1,5 +1,5 @@
 -- Exocortex Knowledge Graph Schema
--- Run: docker exec -i mind-forge-db psql -U mindforge -d mindforge < memory-graph/schema.sql
+-- Applied by npm run graph:init
 
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 

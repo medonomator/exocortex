@@ -36,9 +36,9 @@ export class GraphSearch {
     this.pool = new Pool({
       host: config?.host ?? process.env['PG_HOST'] ?? 'localhost',
       port: config?.port ?? Number(process.env['PG_PORT'] ?? 5433),
-      user: config?.user ?? process.env['PG_USER'] ?? 'mindforge',
-      password: config?.password ?? process.env['PG_PASSWORD'] ?? 'mindforge123',
-      database: config?.database ?? process.env['PG_DATABASE'] ?? 'mindforge',
+      user: config?.user ?? process.env['PG_USER'],
+      password: config?.password ?? process.env['PG_PASSWORD'],
+      database: config?.database ?? process.env['PG_DATABASE'],
       max: 5,
       idleTimeoutMillis: 10_000,
     })
