@@ -1,0 +1,10 @@
+export { DecayEbbinghausPolicy } from './decay-ebbinghaus.js';
+export type { DecayEbbinghausOpts } from './decay-ebbinghaus.js';
+export { ContradictionArchivePolicy } from './contradiction-archive.js';
+export type { ContradictionArchiveOpts } from './contradiction-archive.js';
+export { CorePromotionPolicy } from './core-promotion.js';
+export type { CorePromotionOpts } from './core-promotion.js';
+export { ExplicitTombstonePolicy } from './explicit-tombstone.js';
+export type { ExplicitTombstoneOpts } from './explicit-tombstone.js';
+export { DuplicateGcPolicy } from './duplicate-gc.js';
+export type { DuplicateGcOpts } from './duplicate-gc.js';

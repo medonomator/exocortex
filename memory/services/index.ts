@@ -1,0 +1,12 @@
+export { IngestService } from './ingest.js';
+export type { IngestServiceOpts, IngestHint } from './ingest.js';
+export { ForgetService, DEFAULT_FORGET_ORDER } from './forget.js';
+export type { ForgetServiceOpts, ForgetRunOpts, ForgetRunResult } from './forget.js';
+export { RecallService } from './recall.js';
+export type { RecallServiceOpts, RecallOpts } from './recall.js';
+export { ConsolidateService } from './consolidate.js';
+export type { ConsolidateServiceOpts, ConsolidateRunOpts } from './consolidate.js';
+export { IntrospectService } from './introspect.js';
+export type { IntrospectServiceOpts } from './introspect.js';
+export { MemoryFacade } from './memory-facade.js';
+export type { MemoryFacadeOpts } from './memory-facade.js';

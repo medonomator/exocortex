@@ -1,0 +1,43 @@
+{
+  "name": "exocortex",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "setup": "npm ci && npm --prefix runner ci && npm --prefix memory ci && npm --prefix memory run build",
+    "db:up": "docker compose up -d --wait",
+    "db:init": "npm run graph:init && npm --prefix memory run migrate",
+    "observe": "cd runner && npx tsx src/run-claude.ts",
+    "observe:daily": "cd runner && npx tsx src/run-claude.ts --hours=24 --no-telegram",
+    "observe:weekly": "cd runner && npx tsx src/run-claude.ts --hours=168",
+    "observe:old": "cd runner && npx tsx src/run.ts",
+    "observe:daily:old": "cd runner && npx tsx src/run.ts --hours=24 --no-telegram",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -p runner/tsconfig.json && tsc -p memory/tsconfig.json --noEmit && tsc -p memory/tsconfig.bin.json && tsc -p memory-graph/tsconfig.json --noEmit",
+    "check": "npm run typecheck && npm test",
+    "graph:init": "docker compose exec -T postgres psql -v ON_ERROR_STOP=1 -U mindforge -d mindforge < memory-graph/schema.sql",
+    "swarm:analyze": "cd runner && npx tsx src/swarm-analyze.ts",
+    "swarm:analyze:dry": "cd runner && npx tsx src/swarm-analyze.ts --dry-run",
+    "consolidate": "cd runner && npx tsx src/consolidate.ts",
+    "consolidate:dry": "cd runner && npx tsx src/consolidate.ts --dry-run",
+    "briefing": "cd runner && npx tsx src/morning-briefing.ts",
+    "briefing:dry": "cd runner && npx tsx src/morning-briefing.ts --dry-run"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "@types/pg": "^8.23.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.4"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "langfuse": "^3.38.20",
+    "pg": "^8.20.0",
+    "undici": "^8.1.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

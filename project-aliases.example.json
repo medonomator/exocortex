@@ -1,0 +1,9 @@
+{
+  "my-app-backend": [
+    "my-app",
+    "my-app-backend"
+  ],
+  "web": [
+    "my-app-backend"
+  ]
+}

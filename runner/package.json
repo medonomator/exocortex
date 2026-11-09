@@ -1,0 +1,26 @@
+{
+  "name": "@exocortex/runner",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/run.ts",
+    "start:daily": "tsx src/run.ts --hours=24 --no-telegram",
+    "start:weekly": "tsx src/run.ts --hours=168"
+  },
+  "dependencies": {
+    "@cognitive-engine/core": "^0.2.0",
+    "@cognitive-swarm/consensus": "^0.2.0",
+    "@cognitive-swarm/core": "^0.2.0",
+    "@cognitive-swarm/orchestrator": "^0.2.0",
+    "dotenv": "^16.4.0",
+    "https-proxy-agent": "^7.0.0",
+    "langfuse": "^3.38.20",
+    "openai": "^4.70.0",
+    "pg": "^8.13.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.0",
+    "tsx": "^4.19.0"
+  }
+}
